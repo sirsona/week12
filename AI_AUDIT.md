@@ -36,4 +36,28 @@ if (err.code === "23505")
 
 ### Route Ordering - fixed
 
-Parameter route /:id before specific route /stats
+- Parameter route /:id before specific route /stats
+
+## Day 3
+
+## Authentication
+
+### `src/routes/auth.js`
+
+- Handles user signup and login routes with bcrypt password hashing and JWT token generation.
+
+### `src/middleware/requireAuth.js`
+
+- Verifies JWT tokens from Authorization headers and attaches user data to req.user for protected routes.
+
+### `src/middleware/requireRole.js`
+
+- Authorizes routes based on user roles (admin/manager/agent) using role array validation.
+
+### `schema.sql (Users table)`
+
+- Creates users table with UUID, email, password_hash, role, and adds assigned_to foreign key to leads.
+
+### `index.js`
+
+- Mounts auth routes under /auth and applies requireAuth middleware to all /api/leads routes.
