@@ -34,7 +34,10 @@ async function changeStatus(id, nextStatus) {
   return leadsRepo.updateStatus(id, nextStatus);
 }
 
-async function getStats() {
+async function getStats(user) {
+  if (!["admin"].includes(user.role)) {
+    throw new AppError("Insufficient permissions", 403);
+  }
   const rows = await leadsRepo.statsByStatus();
   const total = rows.reduce((sum, r) => sum + r.total, 0);
   return { total, byStatus: rows };
@@ -50,4 +53,10 @@ async function updateLead(id, body) {
   return leadsRepo.update(id, body);
 }
 
-module.exports = { getLead, listLeads, changeStatus, updateLead, getStats };
+module.exports = {
+  getLead,
+  listLeads,
+  changeStatus,
+  updateLead,
+  getStats,
+};

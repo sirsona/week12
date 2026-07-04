@@ -27,7 +27,7 @@ async function updateLead(req, res) {
   res.json({ lead });
 }
 async function stats(req, res) {
-  const data = await leadsService.getStats();
+  const data = await leadsService.getStats(req.user);
   res.json(data);
 }
 
