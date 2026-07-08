@@ -61,3 +61,19 @@ if (err.code === "23505")
 ### `index.js`
 
 - Mounts auth routes under /auth and applies requireAuth middleware to all /api/leads routes.
+
+## Day 4
+
+### Authentication
+
+- The authentication system uses **JWT (JSON Web Tokens)** with **bcrypt** for password hashing.
+- It implements signup/login flow with role-based access control and row-scoped data access.
+
+| File                                            | Purpose                          |
+| ----------------------------------------------- | -------------------------------- |
+| packages/backend/src/routes/auth.js             | Signup and login endpoints       |
+| packages/backend/src/middleware/requireAuth.js  | JWT authentication middleware    |
+| packages/backend/src/middleware/requireRole.js  | Role-based authorization         |
+| packages/backend/src/services/auth.service.js   | Authentication business logic    |
+| packages/backend/src/repositories/users.repo.js | User database queries            |
+| packages/backend/tests/auth.test.js             | Authentication integration tests |
