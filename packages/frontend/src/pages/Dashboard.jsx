@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 export function Dashboard() {
   const { token, user, logout } = useAuth();
@@ -11,9 +11,7 @@ export function Dashboard() {
     const fetchLeads = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/leads", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
         });
 
         if (!response.ok) {

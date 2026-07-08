@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { Navigate, useNavigate } from "react-router";
+import { LoadingSpinner } from "../components/LoadSpinner";
+import { useAuth } from "../hooks/useAuth";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -8,9 +9,15 @@ export function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   //   const { setToken } = useAuth();
-  const { login } = useAuth();
-
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  if (loading) {
+    return <LoadingSpinner message="Checking authentication..." />;
+  }
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +28,7 @@ export function Login() {
       const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
@@ -30,8 +38,7 @@ export function Login() {
         throw new Error(data.error || "Login failed");
       }
 
-      //   setToken(data.token);
-      login(data.token, { email });
+      await login(data.user);
       navigate("/dashboard");
     } catch (err) {
       setError(err.message);

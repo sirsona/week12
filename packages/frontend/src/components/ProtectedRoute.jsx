@@ -1,11 +1,14 @@
 import { Navigate } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
+import { LoadingSpinner } from "./LoadSpinner";
 
 export default function ProtectedRoute({ children }) {
-  const { token } = useAuth();
-
-  if (!token) {
-    return <Navigate to={"/login"} />;
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
   }
   return children;
 }
