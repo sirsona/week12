@@ -31,6 +31,9 @@ app.use("/api/leads", requireAuth, leadsRoutes);
 app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`CRM server running on : ${PORT}`);
-});
+module.exports = app;
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`CRM server running on : ${PORT}`);
+  });
+}
