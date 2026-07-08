@@ -48,7 +48,52 @@ router.post("/login", async (req, res) => {
     { expiresIn: process.env.JWT_EXPIRY },
   );
 
-  res.json({ token });
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    maxAg: 24 * 60 * 60 * 1000,
+    path: "/",
+  });
+
+  res.json({
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+  });
+});
+
+// /me route
+router.get("/me", async (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const { rows } = await pool.query(
+      "SELECT id, email, role FROM users WHERE id = $1",
+      [payload.sub],
+    );
+    if (!rows) {
+      return res.json(401).json({ error: "User not found" });
+    }
+    res.json({ user: rows[0] });
+  } catch (err) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// add logout route
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "strict",
+  });
+  res.json({ message: "Logged out successfully" });
 });
 
 module.exports = router;
