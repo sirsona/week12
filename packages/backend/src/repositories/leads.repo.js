@@ -12,9 +12,14 @@ async function findByPhone(waPhone) {
   return rows[0] || null;
 }
 
-async function list({ status, search, limit = 50, offset = 0 }) {
+async function list({ status, search, limit = 50, offset = 0, assignedTo }) {
   const conditions = [];
   const params = [];
+
+  if (assignedTo) {
+    params.push(assignedTo);
+    conditions.push(`assigned_to = $${params.length}`);
+  }
 
   if (status) {
     params.push(status);

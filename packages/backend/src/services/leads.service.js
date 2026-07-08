@@ -18,7 +18,10 @@ async function getLead(id) {
   return lead;
 }
 
-async function listLeads(filters) {
+async function listLeads(filters, user) {
+  if (user.role !== "admin") {
+    filters.assignedTo = user.id; // Filter by user ID
+  }
   return leadsRepo.list(filters);
 }
 

@@ -3,12 +3,15 @@ const leadsService = require("../services/leads.service");
 
 async function list(req, res) {
   const { status, search, limit, offset } = req.query;
-  const leads = await leadsService.listLeads({
-    status,
-    search,
-    limit: limit ? parseInt(limit, 10) : undefined,
-    offset: offset ? parseInt(offset, 10) : undefined,
-  });
+  const leads = await leadsService.listLeads(
+    {
+      status,
+      search,
+      limit: limit ? parseInt(limit, 10) : undefined,
+      offset: offset ? parseInt(offset, 10) : undefined,
+    },
+    req.user,
+  );
   res.json({ leads });
 }
 
