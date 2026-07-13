@@ -77,3 +77,15 @@ if (err.code === "23505")
 | packages/backend/src/services/auth.service.js   | Authentication business logic    |
 | packages/backend/src/repositories/users.repo.js | User database queries            |
 | packages/backend/tests/auth.test.js             | Authentication integration tests |
+
+## Day 5
+
+### Work Completed Manually
+
+- Installed and configured Husky.
+- Configured lint-staged and Prettier.
+- Configured Commitlint.
+- Created the Git hooks.
+- Updated the README.
+- Wrote hooks-notes.md.
+- Tested the Git hooks and commit message validation.
